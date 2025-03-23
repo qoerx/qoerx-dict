@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Component
 @Order(0)
 @Slf4j
-public abstract class DictAspect {
+public class DictAspect {
     //需要扫描的注解包
     private final static String EXPRESSION = "@annotation(org.qoerx.dict.annotation.DictTransform)";
     //读取的字典映射map集合
