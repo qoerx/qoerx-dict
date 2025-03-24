@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 字典注解
  * 标注到需要使用的字段上，配合@DictTransform注解使用
  * @Author: wangshuo
- * @Data: 2025/3/18 11:39
+ * @Data: 2025/3/18 21:39
  * */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

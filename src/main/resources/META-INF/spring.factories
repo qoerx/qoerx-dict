@@ -1,0 +1,8 @@
+# ?????
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.qoerx.dict.config.DictConfig,\
+org.qoerx.dict.aspect.DictAspect,\
+org.qoerx.dict.converter.impl.ListConverter,\
+org.qoerx.dict.factory.ConverterFactory,\
+org.qoerx.dict.factory.DictDataFactory,\
+org.qoerx.dict.matcher.impl.ListTypeMatcher
