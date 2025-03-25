@@ -3,13 +3,14 @@ package org.qoerx.dict.factory;
 import org.qoerx.dict.annotation.SupportedType;
 import org.qoerx.dict.converter.IConverter;
 import org.qoerx.dict.matcher.ITypeMatcher;
+import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,18 +20,24 @@ import java.util.Map;
  * @Data: 2025/3/24 20:33
  */
 @Component
-public class ConverterFactory implements ApplicationContextAware {
+public class ConverterFactory {
+
     private static final Logger log = LoggerFactory.getLogger(ConverterFactory.class);
 
+    /**
+     * 转换策略集合
+     * */
     private static Map<Class<? extends ITypeMatcher>, Class<? extends IConverter>> converterMap = new HashMap<>();
 
+    @Resource
+    private ApplicationContext applicationContext;
 
     /**
      * 获取所有@SupportedType注解标记的bean类
      * 并存入全局converterMap
      * */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    @PostConstruct
+    public void init() {
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(SupportedType.class);
         beansWithAnnotation.forEach((beanName, bean) -> {
             Class<?> beanClass = bean.getClass();
@@ -50,14 +57,8 @@ public class ConverterFactory implements ApplicationContextAware {
 
         // 遍历 converterMap 的键，寻找第一个匹配的类型
         for (Map.Entry<Class<? extends ITypeMatcher>, Class<? extends IConverter>> entry : converterMap.entrySet()) {
-            ITypeMatcher ITypeMatcher = null;
-            try {
-                ITypeMatcher = entry.getKey().newInstance();
-                if (ITypeMatcher.matches(returnVal)) {
-                    return entry.getValue();
-                }
-            } catch (InstantiationException | IllegalAccessException e) {
-                log.error("org.qoerx.dict.factory.ConverterFactory.getConverter 执行失败: {} | {} | {}", entry.getKey(), e, e.getMessage());
+            if (SpringUtils.getBean(entry.getKey()).matches(returnVal)){
+                return entry.getValue();
             }
         }
 

@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.qoerx.dict.factory.ConverterFactory;
 import org.qoerx.dict.converter.IConverter;
+import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
@@ -29,8 +30,6 @@ public class DictAspect {
 
     //需要扫描的注解包
     private final static String EXPRESSION = "@annotation(org.qoerx.dict.annotation.DictTransform)";
-    //读取的字典映射map集合
-    private Map<String, Map<String, String>> dictMap = null;
 
     /**
      * 环绕通知：执行包含对应注解的方式，获取返回值，并进行处理
@@ -43,7 +42,7 @@ public class DictAspect {
         try {
             returnVal = joinPoint.proceed();
             Class<? extends IConverter> converter = converterFactory.getConverter(returnVal);
-            returnVal = converter.newInstance().convert(returnVal);
+            returnVal = SpringUtils.getBean(converter).convert(returnVal);
         } catch (Throwable e) {
             log.error("org.qoerx.dict.aspect.DictAspect.returningAdvice 执行失败: {} | {} | {}", joinPoint, e, e.getMessage());
             return returnVal;

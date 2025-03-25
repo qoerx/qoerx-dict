@@ -4,11 +4,11 @@ import org.qoerx.dict.annotation.DictData;
 import org.qoerx.dict.data.IDictData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -19,9 +19,12 @@ import java.util.concurrent.atomic.AtomicReference;
  * @Data: 2025/3/24 20:29
  */
 @Component
-public class DictDataFactory implements ApplicationContextAware {
+public class DictDataFactory {
 
     private static final Logger log = LoggerFactory.getLogger(DictDataFactory.class);
+
+    @Resource
+    private ApplicationContext applicationContext;
 
     private static Map<Object, Map> dictDataMap = new HashMap();
 
@@ -29,16 +32,12 @@ public class DictDataFactory implements ApplicationContextAware {
      * 获取所有@DictData注解标记的bean类
      * 并将结果集存入全局dictDataMap
      * */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    @PostConstruct
+    public void init() {
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(DictData.class);
         beansWithAnnotation.forEach((beanName, bean) -> {
             Class<IDictData> beanClass = (Class<IDictData>) bean.getClass();
-            try {
-                dictDataMap.putAll(beanClass.newInstance().getDictDataMap());
-            } catch (InstantiationException | IllegalAccessException e) {
-                log.error("获取字典数据失败", e);
-            }
+            dictDataMap.putAll(applicationContext.getBean(beanClass).getDictDataMap());
         });
     }
 
