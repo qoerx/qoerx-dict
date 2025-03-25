@@ -1,2 +1,3 @@
 dict:
-  suffix: _dict
+  suffix: "_dict"
+  map_key: "data"

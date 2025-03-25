@@ -1,7 +1,5 @@
 package org.qoerx.dict.annotation;
 
-import org.qoerx.dict.matcher.ITypeMatcher;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,8 +13,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface SupportedType {
-    /**
-     * 类型转换策略实现类
-     * */
-    Class<? extends ITypeMatcher> value();
 }

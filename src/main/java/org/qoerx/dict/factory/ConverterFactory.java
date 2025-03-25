@@ -2,7 +2,6 @@ package org.qoerx.dict.factory;
 
 import org.qoerx.dict.annotation.SupportedType;
 import org.qoerx.dict.converter.IConverter;
-import org.qoerx.dict.matcher.ITypeMatcher;
 import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,23 +27,21 @@ public class ConverterFactory {
     /**
      * 转换策略集合
      * */
-    private static Map<Class<? extends ITypeMatcher>, Class<? extends IConverter>> converterMap = new HashMap<>();
+    private static List<Class<? extends IConverter>> converterList = new ArrayList<>();
 
     @Resource
     private ApplicationContext applicationContext;
 
     /**
      * 获取所有@SupportedType注解标记的bean类
-     * 并存入全局converterMap
+     * 并存入全局converterList
      * */
     @PostConstruct
     public void init() {
         Map<String, Object> beansWithAnnotation = applicationContext.getBeansWithAnnotation(SupportedType.class);
         beansWithAnnotation.forEach((beanName, bean) -> {
             Class<?> beanClass = bean.getClass();
-            SupportedType annotation = beanClass.getAnnotation(SupportedType.class);
-            Class<? extends ITypeMatcher> supportedType = annotation.value();
-            converterMap.put(supportedType, (Class<? extends IConverter>) beanClass);
+            converterList.add((Class<? extends IConverter>) beanClass);
         });
     }
 
@@ -55,10 +53,16 @@ public class ConverterFactory {
             return null;
         }
 
-        // 遍历 converterMap 的键，寻找第一个匹配的类型
-        for (Map.Entry<Class<? extends ITypeMatcher>, Class<? extends IConverter>> entry : converterMap.entrySet()) {
-            if (SpringUtils.getBean(entry.getKey()).matches(returnVal)){
-                return entry.getValue();
+        // 遍历 converterList，寻找第一个匹配的类型
+        for (Class<? extends IConverter> converterClass : converterList) {
+            boolean found = false;
+            try {
+                found = SpringUtils.getBean(converterClass).matches(returnVal);
+            } catch (Exception e) {
+                log.error("org.qoerx.dict.factory.ConverterFactory.getConverter 执行失败: {} | {} | {}", returnVal, e, e.getMessage());
+            }
+            if (found){
+                return converterClass;
             }
         }
 

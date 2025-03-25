@@ -14,4 +14,8 @@ public class DictConstant {
      * 字典后缀
      * */
     public static final String DICT_SUFFIX = "_text";
+    /**
+     * Map集合对应key值
+     * */
+    public static final String DICT_MAP_KEY = "data";
 }

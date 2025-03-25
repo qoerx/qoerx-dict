@@ -7,6 +7,10 @@ package org.qoerx.dict.converter;
  */
 public interface IConverter {
     /**
+     * 判断对象是否符合匹配规则
+     * */
+    boolean matches(Object input) throws Exception;
+    /**
      * 转换方法
      * */
     Object convert(Object input);

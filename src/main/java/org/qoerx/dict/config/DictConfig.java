@@ -17,6 +17,11 @@ public class DictConfig {
      * */
     private String suffix = DictConstant.DICT_SUFFIX;
 
+    /**
+     * Map集合对应key值
+     * */
+    private String mapKey = DictConstant.DICT_MAP_KEY;
+
     public String getSuffix() {
         return suffix;
     }
@@ -25,4 +30,11 @@ public class DictConfig {
         this.suffix = suffix;
     }
 
+    public String getMapKey() {
+        return mapKey;
+    }
+
+    public void setMapKey(String mapKey) {
+        this.mapKey = mapKey;
+    }
 }

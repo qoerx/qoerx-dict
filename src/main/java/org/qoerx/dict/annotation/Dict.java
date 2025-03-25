@@ -18,20 +18,4 @@ public @interface Dict {
      * 字典编码
      * */
     String code() default "";
-    /**
-     * 返回映射字段名称
-     * */
-    String fieldName() default "";
-    /**
-     * 是否从枚举中获取
-     * */
-    boolean isEnum() default false;
-    /*
-    * 枚举类名
-    * */
-    Class<?> enumClass() default void.class;
-    /**
-     * 字典表名
-     * */
-    String tableName() default "";
 }
