@@ -6,12 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 字典转换标记注解
- * 标注到控制层方法中，会将返回字段中包含@Dict注解的字段进行字典转换
+ * 字典转换类型注解
  * @Author: wangshuo
- * @Data: 2025/3/21 20:41
+ * @Data: 2025/3/26 19:39
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-public @interface DictTransform {
+@Target(ElementType.TYPE)
+public @interface TypeTransform {
+    int value();
 }

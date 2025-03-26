@@ -1,7 +1,7 @@
 package org.qoerx.dict.factory;
 
 import org.qoerx.dict.annotation.SupportedType;
-import org.qoerx.dict.converter.IConverter;
+import org.qoerx.dict.strategy.IConverter;
 import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class ConverterFactory {
             try {
                 found = SpringUtils.getBean(converterClass).matches(returnVal);
             } catch (Exception e) {
-                log.error("org.qoerx.dict.factory.ConverterFactory.getConverter 执行失败: {} | {} | {}", returnVal, e, e.getMessage());
+                log.error("org.qoerx.dict.factory.ConverterFactory.getConverter 执行失败: \n{}\n{}\n{}", returnVal, e, e.getMessage());
             }
             if (found){
                 return converterClass;

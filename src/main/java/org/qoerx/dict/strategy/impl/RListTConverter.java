@@ -1,9 +1,9 @@
-package org.qoerx.dict.converter.impl;
+package org.qoerx.dict.strategy.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import org.qoerx.dict.annotation.SupportedType;
 import org.qoerx.dict.config.DictConfig;
-import org.qoerx.dict.converter.IConverter;
+import org.qoerx.dict.strategy.IConverter;
 import org.qoerx.dict.template.ConverterTemplate;
 import org.qoerx.dict.utils.DictUtils;
 import org.qoerx.dict.utils.SpringUtils;
@@ -34,7 +34,7 @@ public class RListTConverter extends ConverterTemplate implements IConverter {
         try {
             map = DictUtils.convertToMap(input);
         } catch (IllegalAccessException e) {
-            log.error("org.qoerx.dict.converter.impl.MapListTConverter.matches error: {},{}", e, e.getMessage());
+            log.error("org.qoerx.dict.converter.impl.RListTConverter.matches 执行失败: \n{}\n{}", e, e.getMessage());
         }
         if (map != null && !map.isEmpty()){
             Object list = map.get(SpringUtils.getBean(DictConfig.class).getMapKey());
@@ -54,7 +54,7 @@ public class RListTConverter extends ConverterTemplate implements IConverter {
         try {
             map = DictUtils.convertToMap(input);
         } catch (IllegalAccessException e) {
-            log.error("org.qoerx.dict.converter.impl.MapListTConverter.convert error: {},{}", e, e.getMessage());
+            log.error("org.qoerx.dict.converter.impl.RListTConverter.convert 执行失败: \n{}\n{}", e, e.getMessage());
         }
         if (map != null && !map.isEmpty()) {
             Object list = map.get(SpringUtils.getBean(DictConfig.class).getMapKey());

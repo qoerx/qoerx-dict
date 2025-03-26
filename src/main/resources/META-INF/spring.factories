@@ -4,6 +4,9 @@ org.qoerx.dict.config.DictConfig,\
 org.qoerx.dict.aspect.DictAspect,\
 org.qoerx.dict.factory.ConverterFactory,\
 org.qoerx.dict.factory.DictDataFactory,\
-org.qoerx.dict.converter.impl.ListTConverter,\
-org.qoerx.dict.converter.impl.RTConverter,\
-org.qoerx.dict.converter.impl.RListTConverter
+org.qoerx.dict.factory.TypeTransformFactory,\
+org.qoerx.dict.strategy.impl.ListTConverter,\
+org.qoerx.dict.strategy.impl.RTConverter,\
+org.qoerx.dict.strategy.impl.RListTConverter,\
+org.qoerx.dict.strategy.impl.CodeTypeTransForm,\
+org.qoerx.dict.strategy.impl.EnumTypeTransForm

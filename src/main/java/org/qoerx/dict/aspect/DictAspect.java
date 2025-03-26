@@ -4,7 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.qoerx.dict.factory.ConverterFactory;
-import org.qoerx.dict.converter.IConverter;
+import org.qoerx.dict.strategy.IConverter;
 import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * @Author: wangshuo
@@ -44,7 +43,7 @@ public class DictAspect {
             Class<? extends IConverter> converter = converterFactory.getConverter(returnVal);
             returnVal = SpringUtils.getBean(converter).convert(returnVal);
         } catch (Throwable e) {
-            log.error("org.qoerx.dict.aspect.DictAspect.returningAdvice 执行失败: {} | {} | {}", joinPoint, e, e.getMessage());
+            log.error("org.qoerx.dict.aspect.DictAspect.returningAdvice 执行失败: \n{}\n{}\n{}", joinPoint, e, e.getMessage());
             return returnVal;
         }
         return returnVal;

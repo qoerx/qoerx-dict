@@ -1,4 +1,4 @@
-package org.qoerx.dict.converter;
+package org.qoerx.dict.strategy;
 
 /**
  * 字典转换策略接口

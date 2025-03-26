@@ -1,4 +1,4 @@
-package org.qoerx.dict.data;
+package org.qoerx.dict.strategy;
 
 import java.util.Map;
 

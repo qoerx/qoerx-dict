@@ -1,9 +1,9 @@
-package org.qoerx.dict.converter.impl;
+package org.qoerx.dict.strategy.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import org.qoerx.dict.annotation.SupportedType;
 import org.qoerx.dict.config.DictConfig;
-import org.qoerx.dict.converter.IConverter;
+import org.qoerx.dict.strategy.IConverter;
 import org.qoerx.dict.template.ConverterTemplate;
 import org.qoerx.dict.utils.DictUtils;
 import org.qoerx.dict.utils.SpringUtils;
@@ -38,7 +38,7 @@ public class RTConverter extends ConverterTemplate implements IConverter {
             }
         }
         } catch (IllegalAccessException e) {
-            log.error("org.qoerx.dict.converter.impl.RTConverter.matches error: {},{}", e, e.getMessage());
+            log.error("org.qoerx.dict.converter.impl.RTConverter.matches 执行失败: \n{}\n{}", e, e.getMessage());
         }
         return false;
     }
@@ -54,12 +54,12 @@ public class RTConverter extends ConverterTemplate implements IConverter {
                 Object obj = map.get(SpringUtils.getBean(DictConfig.class).getMapKey());
                 Map objMap = DictUtils.convertToMap(obj);
                 if (objMap != null && !objMap.isEmpty()){
-                    SpringUtils.getBean(ListTConverter.class).setDictProperty(obj, objMap);
+                    setDictProperty(obj, objMap);
                 }
                 map.put(SpringUtils.getBean(DictConfig.class).getMapKey(), objMap);
             }
         } catch (IllegalAccessException e) {
-            log.error("org.qoerx.dict.converter.impl.RTConverter.convert error: {},{}", e, e.getMessage());
+            log.error("org.qoerx.dict.converter.impl.RTConverter.convert 执行失败: \n{}\n{}", e, e.getMessage());
         }
         String json = JSONObject.toJSONString(map);
         return JSONObject.parseObject(json, aClass);

@@ -35,4 +35,17 @@ public class DictUtils {
         }
         return resultMap;
     }
+
+    /**
+     * 生成字段名的get方法
+     * @param fieldName 字段名
+     * @return 字段名的get方法
+     * */
+    public static String toGetterMethodName(String fieldName) {
+        if (fieldName == null || fieldName.isEmpty()) {
+            throw new IllegalArgumentException("字段名不能为null或长度为0");
+        }
+        // 将字段名首字母大写，并添加 "get" 前缀
+        return "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+    }
 }
