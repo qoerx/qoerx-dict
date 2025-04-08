@@ -2,7 +2,6 @@ package org.qoerx.dict.factory;
 
 import org.qoerx.dict.annotation.TypeTransform;
 import org.qoerx.dict.strategy.ITypeTransform;
-import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -47,6 +46,6 @@ public class TypeTransformFactory {
             log.error("没有找到对应的转换器");
             return null;
         }
-        return SpringUtils.getBean(aClass);
+        return applicationContext.getBean(aClass);
     }
 }

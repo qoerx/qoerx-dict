@@ -18,9 +18,16 @@ public class DictConfig {
     private String suffix = DictConstant.DICT_SUFFIX;
 
     /**
-     * Map集合对应key值
+     * 返回结果Map集合对应默认key值
+     * 适用于统一返回结果集的程序使用
      * */
     private String mapKey = DictConstant.DICT_MAP_KEY;
+
+    /**
+     * 最大递归深度
+     * 可字典翻译的实体嵌套的最大深度
+     * */
+    private Integer depth = DictConstant.DICT_DEPTH;
 
     public String getSuffix() {
         return suffix;
@@ -36,5 +43,13 @@ public class DictConfig {
 
     public void setMapKey(String mapKey) {
         this.mapKey = mapKey;
+    }
+
+    public Integer getDepth() {
+        return depth;
+    }
+
+    public void setDepth(Integer depth) {
+        this.depth = depth;
     }
 }

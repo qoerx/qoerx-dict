@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -39,6 +40,87 @@ public class DictDataFactory {
             Class<IDictData> beanClass = (Class<IDictData>) bean.getClass();
             dictDataMap.putAll(applicationContext.getBean(beanClass).getDictDataMap());
         });
+    }
+
+    /**
+     * 获取全局字典数据集合
+     * */
+    public Map<Object, Map> getDictDataMap() {
+        return dictDataMap;
+    }
+
+    /**
+     * 重置全局字典数据集合
+     * */
+    public void setDictDataMap(Map<Object, Map> dictDataMap) {
+        DictDataFactory.dictDataMap = dictDataMap;
+    }
+
+    /**
+     * 新增全局字典数据集合批量新增方式
+     * */
+    public void addDictDataMapAll(Map<Object, Map> dictDataMap) {
+        DictDataFactory.dictDataMap.putAll(dictDataMap);
+    }
+
+    /**
+     * 新增单个字典数据
+     * */
+    public void addDictDataMap(Object dictCode, Map dictDataMap) {
+        Assert.isTrue(!dictDataMap.containsKey(dictCode), "字典数据已存在，请勿重复添加");
+        DictDataFactory.dictDataMap.put(dictCode, dictDataMap);
+    }
+
+    /**
+     * 新增单个字典某项数据
+     * */
+    public void addDictDataMapValue(Object dictCode, Object dictValue, Object dictName) {
+        Assert.isTrue(dictDataMap.containsKey(dictCode), "字典数据不存在，请先添加");
+        Map dictValueMap = DictDataFactory.dictDataMap.get(dictCode);
+        Assert.isTrue(!dictValueMap.containsKey(dictValue), "字典项已存在，请勿重复添加");
+        dictValueMap.put(dictValue, dictName);
+    }
+
+    /**
+     * 更新单个字典数据
+     * */
+    public void updateDictDataMap(Object dictCode, Map dictDataMap) {
+        Assert.isTrue(dictDataMap.containsKey(dictCode), "字典数据不存在，请先添加");
+        DictDataFactory.dictDataMap.replace(dictCode, dictDataMap);
+    }
+
+    /**
+     * 更新单个字典的具体值
+     * */
+    public void updateDictDataMapValue(Object dictCode, Object dictValue, Object dictName) {
+        Assert.isTrue(dictDataMap.containsKey(dictCode), "字典数据不存在，请先添加");
+        Map dictValueMap = DictDataFactory.dictDataMap.get(dictCode);
+        Assert.isTrue(dictValueMap.containsKey(dictValue), "字典项不存在，请先添加");
+        dictValueMap.replace(dictValue, dictName);
+    }
+
+    /**
+     * 删除单个字典数据
+     * */
+    public void removeDictDataMap(Object dictCode) {
+        Assert.isTrue(dictDataMap.containsKey(dictCode), "字典数据不存在，请先添加");
+        DictDataFactory.dictDataMap.remove(dictCode);
+    }
+
+
+    /**
+     * 清除字典数据
+     * */
+    public void clearDictDataMap() {
+        DictDataFactory.dictDataMap.clear();
+    }
+
+    /**
+     * 删除单个字典的某个值
+     * */
+    public void removeDictDataMapValue(Object dictCode, Object dictValue) {
+        Map dictDataMap = DictDataFactory.dictDataMap.get(dictCode);
+        dictDataMap.remove(dictValue);
     }
 
     /**

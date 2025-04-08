@@ -1,12 +1,10 @@
 package org.qoerx.dict.strategy.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import org.qoerx.dict.annotation.SupportedType;
-import org.qoerx.dict.config.DictConfig;
 import org.qoerx.dict.strategy.IConverter;
 import org.qoerx.dict.template.ConverterTemplate;
 import org.qoerx.dict.utils.DictUtils;
-import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,9 +25,8 @@ public class RListTConverter extends ConverterTemplate implements IConverter {
 
     private static final Logger log = LoggerFactory.getLogger(RListTConverter.class);
 
-
     @Override
-    public boolean matches(Object input) {
+    public boolean matches(Object input, String transformValue) {
         Map map = null;
         try {
             map = DictUtils.convertToMap(input);
@@ -37,18 +34,17 @@ public class RListTConverter extends ConverterTemplate implements IConverter {
             log.error("org.qoerx.dict.converter.impl.RListTConverter.matches 执行失败: \n{}\n{}", e, e.getMessage());
         }
         if (map != null && !map.isEmpty()){
-            Object list = map.get(SpringUtils.getBean(DictConfig.class).getMapKey());
+            String mapKey = getRKey(map, transformValue);
+            Object list = map.get(mapKey);
             if (list != null){
-                if (list instanceof List){
-                    return true;
-                }
+                return list instanceof List;
             }
         }
         return false;
     }
 
     @Override
-    public Object convert(Object input) {
+    public Object convert(Object input, String transformValue) {
         Class<?> aClass = input.getClass();
         Map map = null;
         try {
@@ -57,12 +53,13 @@ public class RListTConverter extends ConverterTemplate implements IConverter {
             log.error("org.qoerx.dict.converter.impl.RListTConverter.convert 执行失败: \n{}\n{}", e, e.getMessage());
         }
         if (map != null && !map.isEmpty()) {
-            Object list = map.get(SpringUtils.getBean(DictConfig.class).getMapKey());
+            String mapKey = getRKey(map, transformValue);
+            Object list = map.get(mapKey);
             if (list != null) {
                 if (list instanceof List) {
-                    ListTConverter listTConverter = SpringUtils.getBean(ListTConverter.class);
-                    List<Map> dataList = listTConverter.setDataList((List) list);
-                    map.put(SpringUtils.getBean(DictConfig.class).getMapKey(), dataList);
+                    ListTConverter listTConverter = applicationContext.getBean(ListTConverter.class);
+                    List<JSONObject> dataList = listTConverter.setDataList((List) list);
+                    map.put(mapKey, dataList);
                 }
             }
         }

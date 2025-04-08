@@ -2,7 +2,6 @@ package org.qoerx.dict.factory;
 
 import org.qoerx.dict.annotation.SupportedType;
 import org.qoerx.dict.strategy.IConverter;
-import org.qoerx.dict.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -48,7 +47,7 @@ public class ConverterFactory {
     /**
      * 获取当前转换策略
      * */
-    public Class<? extends IConverter> getConverter(Object returnVal) {
+    public Class<? extends IConverter> getConverter(Object returnVal, String transformValue) {
         if (returnVal == null) {
             return null;
         }
@@ -57,7 +56,7 @@ public class ConverterFactory {
         for (Class<? extends IConverter> converterClass : converterList) {
             boolean found = false;
             try {
-                found = SpringUtils.getBean(converterClass).matches(returnVal);
+                found = applicationContext.getBean(converterClass).matches(returnVal, transformValue);
             } catch (Exception e) {
                 log.error("org.qoerx.dict.factory.ConverterFactory.getConverter 执行失败: \n{}\n{}\n{}", returnVal, e, e.getMessage());
             }

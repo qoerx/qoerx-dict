@@ -14,4 +14,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 public @interface DictTransform {
+    /**
+     * 非默认map的key值情况下使用，默认为空
+     * 当value存在时，使用value的值在map中进行检索
+     * 例：
+     * 当map的key为result时，由于默认key值为data，
+     * 这时不进行转换，若想进行转换，需加注解@DictTransform("result")
+     * 自定义注解情况下可以使value值为需要的值
+     * */
+    String value() default "";
 }

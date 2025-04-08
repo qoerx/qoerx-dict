@@ -1,5 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.qoerx.dict.utils.SpringUtils,\
 org.qoerx.dict.config.DictConfig,\
 org.qoerx.dict.aspect.DictAspect,\
 org.qoerx.dict.factory.ConverterFactory,\

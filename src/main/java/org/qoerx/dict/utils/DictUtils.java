@@ -12,6 +12,7 @@ import java.util.Map;
 public class DictUtils {
     /**
      * 将对象转换为Map
+     * 这个不能将子类转换成对应的map值
      * @param obj 需要转换的对象
      * @return 转换后的Map
      * @throws IllegalAccessException

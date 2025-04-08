@@ -1,3 +1,4 @@
 dict:
   suffix: "_dict"
   map_key: "data"
+  depth: 3
