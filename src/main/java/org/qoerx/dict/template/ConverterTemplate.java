@@ -12,7 +12,10 @@ import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 类型转换模板实体
@@ -93,6 +96,28 @@ public class ConverterTemplate {
             }
             // 判断是否为子实体并递归处理
             try {
+                //判断是否为list<T>
+                if (field.getType().isAssignableFrom(List.class)) {
+                    //遍历这个数组
+                    List<Object> list = (List<Object>) field.get(columnProperty);
+                    //判断是否为空
+                    if (list != null && !list.isEmpty()) {
+                        //遍历list
+                        List<JSONObject> dataList = (List<JSONObject>) list.stream().map(
+                                thisColumnProperty -> {
+                                    //实体类转map
+                                    JSONObject map1 = null;
+                                    map1 = JSONObject.parseObject(JSONObject.toJSONString(thisColumnProperty));
+                                    try {
+                                        setDictProperty(thisColumnProperty, map1, depth + 1);
+                                    } catch (IllegalAccessException e) {
+                                    }
+                                    return map1;
+                                }
+                        ).collect(Collectors.toList());
+                        map.put(field.getName(), dataList);
+                    }
+                }
                 if (isSubEntity(field)) {
                     Object subEntity = field.get(columnProperty);
                     if (subEntity != null) {
@@ -119,6 +144,7 @@ public class ConverterTemplate {
                 && !fieldType.equals(Float.class)
                 && !fieldType.equals(Boolean.class)
                 && !fieldType.equals(BigDecimal.class)
+                && !fieldType.equals(Date.class)
                 && !Collection.class.isAssignableFrom(fieldType)
                 && !fieldType.isArray()
                 && !Map.class.isAssignableFrom(fieldType);

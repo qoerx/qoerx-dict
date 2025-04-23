@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.qoerx.dict.annotation.DictTransform;
-import org.qoerx.dict.annotation.TypeTransform;
 import org.qoerx.dict.factory.ConverterFactory;
 import org.qoerx.dict.strategy.IConverter;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
@@ -43,15 +41,14 @@ public class DictAspect {
      * @param joinPoint
      */
     @Around(value = EXPRESSION)
-    public Object returningAdvice(ProceedingJoinPoint joinPoint) {
-        Object returnVal = null;
+    public Object returningAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+        //获取注解@DictTransform对应的值
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        DictTransform annotation = method.getAnnotation(DictTransform.class);
+        String value = annotation.value();
+        Object returnVal = joinPoint.proceed();
         try {
-            //获取注解@DictTransform对应的值
-            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-            Method method = signature.getMethod();
-            DictTransform annotation = method.getAnnotation(DictTransform.class);
-            String value = annotation.value();
-            returnVal = joinPoint.proceed();
             Class<? extends IConverter> converter = converterFactory.getConverter(returnVal, value);
             returnVal = applicationContext.getBean(converter).convert(returnVal, value);
         } catch (Throwable e) {
